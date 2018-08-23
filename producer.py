@@ -1,10 +1,17 @@
 # -*- coding: UTF-8 -*-
+import sys
+
 import pika
 
 printPrefix = '[producer]'
+try:
+    rabbitMqHost = sys.argv[1]
+except IndexError:
+    print('rabbitMq hostname must be the first parameter falling back on localhost')
+    rabbitMqHost = 'localhost'
 
 creds = pika.PlainCredentials(username='rabbitmq', password='rabbitmq')
-connectionString = 'amqp://rabbitmq:rabbitmq@localhost:5672/%2F'
+connectionString = 'amqp://rabbitmq:rabbitmq@' + rabbitMqHost + ':5672/%2F'
 try:
     print(printPrefix, 'connecting with ', connectionString)
     urlConnection = pika.BlockingConnection(pika.connection.URLParameters(connectionString))
@@ -14,7 +21,7 @@ finally:
     print(printPrefix, 'closing connection ', connectionString)
     urlConnection.close()
 
-parameters = pika.ConnectionParameters(host='localhost', port=5672, virtual_host='/', credentials=creds)
+parameters = pika.ConnectionParameters(host=rabbitMqHost, port=5672, virtual_host='/', credentials=creds)
 try:
     print(printPrefix, 'connecting with', parameters.host, parameters.port)
     connection = pika.BlockingConnection(parameters)

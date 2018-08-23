@@ -1,9 +1,18 @@
 # -*- coding: UTF-8 -*-
 import pika
+import sys
 
 printPrefix = '[consumer]'
+try:
+    rabbitMqHost = sys.argv[1]
+    print(printPrefix, 'running with parameter:', rabbitMqHost)
+except IndexError:
+    print('rabbitMq hostname must be the first parameter falling back on localhost')
+    rabbitMqHost = 'localhost'
+
 creds = pika.PlainCredentials(username='rabbitmq', password='rabbitmq')
-parameters = pika.ConnectionParameters(host='localhost', port=5672, virtual_host='/', credentials=creds)
+parameters = pika.ConnectionParameters(host=rabbitMqHost, port=5672, virtual_host='/', credentials=creds,
+                                       connection_attempts=10, retry_delay=5)
 
 
 def callback(ch, method, properties, body):

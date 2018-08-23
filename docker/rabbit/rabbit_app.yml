@@ -4,5 +4,23 @@ services:
         image: rabbit-flow
         labels:
           NAME: "producer"
-        command: python timed_producer.py
-
+        command: python -u timed_producer.py rabbit1
+    consumer:
+        image: rabbit-flow
+        labels:
+          NAME: "consumer"
+        command: python -u consumer.py rabbit1
+    rabbit1:
+        image: rabbitmq:3-management
+        container_name: rabbit1
+        hostname: "rabbit1"
+        environment:
+          RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+          RABBITMQ_DEFAULT_USER: "rabbitmq"
+          RABBITMQ_DEFAULT_PASS: "rabbitmq"
+          RABBITMQ_DEFAULT_VHOST: "/"
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+        labels:
+          NAME: "rabbitmq1"
