@@ -8,7 +8,6 @@ services:
           RABBITMQ_DEFAULT_USER: "rabbitmq"
           RABBITMQ_DEFAULT_PASS: "rabbitmq"
           RABBITMQ_DEFAULT_VHOST: "/"
-          COMPOSE_PROJECT_NAME: "rabbitmq1"
         ports:
             - "15672:15672"
             - "5672:5672"
