@@ -1,1 +1,1 @@
-docker-compose -f rabbit_app.yml up -d --scale producer=20
+docker-compose -f rabbit_app.yml up -d --scale producer=2 --scale worker=10

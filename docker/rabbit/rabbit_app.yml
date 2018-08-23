@@ -1,4 +1,4 @@
-version: '2'
+version: '3.7'
 services:
     producer:
         image: rabbit-flow
@@ -10,6 +10,11 @@ services:
         labels:
           NAME: "consumer"
         command: python -u consumer.py rabbit1
+    worker:
+        image: rabbit-flow
+        labels:
+          NAME: "worker"
+        command: python -u worker.py rabbit1
     rabbit1:
         image: rabbitmq:3-management
         container_name: rabbit1
