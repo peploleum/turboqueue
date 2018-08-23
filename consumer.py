@@ -1,20 +1,15 @@
 # -*- coding: UTF-8 -*-
 import pika
 
-printPrefix = '[producer]'
-
+printPrefix = '[consumer]'
 creds = pika.PlainCredentials(username='rabbitmq', password='rabbitmq')
-connectionString = 'amqp://rabbitmq:rabbitmq@localhost:5672/%2F'
-try:
-    print(printPrefix, 'connecting with ', connectionString)
-    urlConnection = pika.BlockingConnection(pika.connection.URLParameters(connectionString))
-except RuntimeError:
-    print(printPrefix, 'failed connecting with ', connectionString)
-finally:
-    print(printPrefix, 'closing connection ', connectionString)
-    urlConnection.close()
-
 parameters = pika.ConnectionParameters(host='localhost', port=5672, virtual_host='/', credentials=creds)
+
+
+def callback(ch, method, properties, body):
+    print(printPrefix, " [x] Received %r" % body)
+
+
 try:
     print(printPrefix, 'connecting with', parameters.host, parameters.port)
     connection = pika.BlockingConnection(parameters)
@@ -23,10 +18,10 @@ try:
     queueName = 'hello'
     print(printPrefix, 'declaring queue', queueName)
     channel.queue_declare(queue=queueName)
-    messageBody = 'Hello Dude'
-    print(printPrefix, 'publishing message', messageBody)
-    channel.basic_publish(exchange='', routing_key=queueName, body=messageBody)
-    print(printPrefix, '[x] Sent', messageBody)
+    print(printPrefix, 'consuming messages from queue', queueName)
+    channel.basic_consume(callback, queue=queueName, no_ack=True)
+    print(printPrefix, ' [*] Waiting for messages. To exit press CTRL+C')
+    channel.start_consuming()
 except RuntimeError:
     print(printPrefix, 'failed connecting with parameters', parameters.host, parameters.port)
 finally:
