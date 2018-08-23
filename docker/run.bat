@@ -1,0 +1,1 @@
+docker-compose -f rabbit_broker.yml up -d
