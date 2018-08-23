@@ -1,0 +1,8 @@
+version: '2'
+services:
+    producer:
+        image: rabbit-flow
+        labels:
+          NAME: "producer"
+        command: python timed_producer.py
+
