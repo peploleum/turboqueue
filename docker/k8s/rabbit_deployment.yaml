@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbit-deployment
+  namespace: rabbit-ns
+spec:
+  selector:
+    matchLabels:
+      app: rabbit1
+  replicas: 1
+  template:
+    metadata:
+     labels:
+      app: rabbit1
+      env: test
+    spec:
+      containers:
+      - name: rabbit-broker
+        image: rabbitmq:3-management
+        ports:
+        - containerPort: 15672
+          name: admin
+        - containerPort: 5672
+          name: amq
+        env:
+         - name:  RABBITMQ_ERLANG_COOKIE
+           value: "SWQOKODSQALRPCLNMEQG"
+         - name:  RABBITMQ_DEFAULT_USER
+           value: "rabbitmq"
+         - name:  RABBITMQ_DEFAULT_PASS
+           value: "rabbitmq"
+         - name:  RABBITMQ_DEFAULT_VHOST
+           value: "/"
+      - name: rabbit-procuder
+        image: rabbit-flow
+        imagePullPolicy: Never
+        command:
+        - python
+        - -u
+        - timed_producer.py
+        - rabbit-broker
+      - name: rabbit-consumer
+        image: rabbit-flow
+        imagePullPolicy: Never
+        command:
+        - python
+        - -u
+        - consumer.py
+        - rabbit-broker

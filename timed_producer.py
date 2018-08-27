@@ -22,7 +22,7 @@ try:
     print(printPrefix, 'declaring queue', queueName)
     channel.queue_declare(queue=queueName)
     while True:
-        messageBody = str(random.randint(1, 9))
+        messageBody = str(random.randint(1, 3))
         print(printPrefix, 'publishing message', messageBody)
         channel.basic_publish(exchange='', routing_key=queueName, body=messageBody)
         print(printPrefix, '[x] Sent', messageBody)
