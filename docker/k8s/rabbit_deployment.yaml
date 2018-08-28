@@ -31,14 +31,14 @@ spec:
            value: "rabbitmq"
          - name:  RABBITMQ_DEFAULT_VHOST
            value: "/"
-      - name: rabbit-procuder
+      - name: rabbit-producer
         image: rabbit-flow
         imagePullPolicy: Never
         command:
         - python
         - -u
         - timed_producer.py
-        - rabbit-broker
+        - localhost
       - name: rabbit-consumer
         image: rabbit-flow
         imagePullPolicy: Never
@@ -46,4 +46,4 @@ spec:
         - python
         - -u
         - consumer.py
-        - rabbit-broker
+        - localhost
