@@ -4,17 +4,12 @@ services:
         image: rabbit-flow
         labels:
           NAME: "producer"
-        command: python -u timed_producer.py rabbit1
-    consumer:
-        image: rabbit-flow
-        labels:
-          NAME: "consumer"
-        command: python -u consumer.py rabbit1
+        command: python -u timed_producer.py rabbit1 5672 hello
     worker:
         image: rabbit-flow
         labels:
           NAME: "worker"
-        command: python -u worker.py rabbit1
+        command: python -u worker.py rabbit1 5672 hello
     rabbit1:
         image: rabbitmq:3-management
         container_name: rabbit1

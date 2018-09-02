@@ -2,9 +2,9 @@
 import pika
 
 
-def do_connect(hostname):
+def do_connect(hostname, port):
     creds = pika.PlainCredentials(username='rabbitmq', password='rabbitmq')
-    parameters = pika.ConnectionParameters(host=hostname, port=5672, virtual_host='/', credentials=creds,
+    parameters = pika.ConnectionParameters(host=hostname, port=port, virtual_host='/', credentials=creds,
                                            connection_attempts=10, retry_delay=5)
     try:
         print('connecting with', parameters.host, parameters.port)

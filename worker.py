@@ -9,10 +9,16 @@ workerId = str(uuid.uuid1())
 printPrefix = '[worker ' + workerId + ']'
 try:
     rabbitMqHost = sys.argv[1]
+    rabbitMqPort = sys.argv[2]
+    rabbitMqQueueName = sys.argv[3]
     print(printPrefix, 'running with parameter:', rabbitMqHost)
+    print(printPrefix, 'running with parameter:', rabbitMqPort)
+    print(printPrefix, 'running with parameter:', rabbitMqPort)
 except IndexError:
     print('rabbitMq hostname must be the first parameter falling back on localhost')
     rabbitMqHost = 'localhost'
+    rabbitMqPort = 5672
+    rabbitMqQueueName = 'hello'
 
 
 def callback(ch, method, properties, body):
@@ -33,11 +39,10 @@ try:
     connection = api.do_connect(rabbitMqHost)
     print(printPrefix, 'opening channel')
     channel = connection.channel()
-    queueName = 'hello'
-    print(printPrefix, 'declaring queue', queueName)
-    channel.queue_declare(queue=queueName)
-    print(printPrefix, 'consuming messages from queue', queueName)
-    channel.basic_consume(callback, queue=queueName)
+    print(printPrefix, 'declaring queue', rabbitMqQueueName)
+    channel.queue_declare(queue=rabbitMqQueueName)
+    print(printPrefix, 'consuming messages from queue', rabbitMqQueueName)
+    channel.basic_consume(callback, queue=rabbitMqQueueName)
     print(printPrefix, ' [*] Waiting for messages. To exit press CTRL+C')
     channel.start_consuming()
 except RuntimeError:
