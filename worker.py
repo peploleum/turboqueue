@@ -13,7 +13,7 @@ try:
     rabbitMqQueueName = sys.argv[3]
     print(printPrefix, 'running with parameter:', rabbitMqHost)
     print(printPrefix, 'running with parameter:', rabbitMqPort)
-    print(printPrefix, 'running with parameter:', rabbitMqPort)
+    print(printPrefix, 'running with parameter:', rabbitMqQueueName)
 except IndexError:
     print('rabbitMq hostname must be the first parameter falling back on localhost')
     rabbitMqHost = 'localhost'
@@ -36,7 +36,7 @@ def callback(ch, method, properties, body):
 
 try:
     print(printPrefix, 'connecting...')
-    connection = api.do_connect(rabbitMqHost)
+    connection = api.do_connect(rabbitMqHost, rabbitMqPort)
     print(printPrefix, 'opening channel')
     channel = connection.channel()
     print(printPrefix, 'declaring queue', rabbitMqQueueName)
