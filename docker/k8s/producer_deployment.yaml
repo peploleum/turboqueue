@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbit-deployment
+  namespace: rabbit-ns
+spec:
+  selector:
+    matchLabels:
+      app: rabbit1
+  replicas: 1
+  template:
+    metadata:
+     labels:
+      app: rabbit1
+      env: test
+    spec:
+      - name: rabbit-producer
+        image: rabbit-flow
+        imagePullPolicy: Never
+        command:
+        - python
+        - -u
+        - timed_producer.py
+        - localhost
