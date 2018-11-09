@@ -2,6 +2,8 @@ version: '3.7'
 services:
     producer:
         image: rabbit-flow
+        build:
+          context: ./python/
         labels:
           NAME: "producer"
         command: python -u timed_producer.py rabbit1 5672 hello
@@ -9,6 +11,8 @@ services:
           - rabbit
     worker:
         image: rabbit-flow
+        build:
+          context: ./python/
         labels:
           NAME: "worker"
         command: python -u worker.py rabbit1 5672 hello
